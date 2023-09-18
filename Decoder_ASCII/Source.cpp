@@ -79,23 +79,8 @@ int main() {
 		}
 	}
 
-	//for (auto i : numbersAscii)
-	//	std::cout << i << std::endl;
-
  
-	// Двумерный массив для вывода табли
-	// 's
-	// истинности
-	//std::vector<std::vector<std::string>> truthTable(256, std::vector<std::string>(5, "*"));
-	//for (int i = 0; i < 256; i++) {
-	//	for (int j = 0; j < 3; j++) {
-	//		if (j == 0) truthTable[i][j] = std::to_string(i);
-	//		if (j == 1 || j == 2) {
-	//			truthTable[i][j] = hexToBinary(i);
-	//		}
-	//	}
-	//	std::cout << std::endl;
-	//}
+	// Двумерный массив для вывода таблицы истинности
 	int fRank = 1;
 	int counter = 0;
 	int hex = 16;
@@ -121,21 +106,9 @@ int main() {
 		}
 		std::cout << std::endl;
 	}
-	// 150   00111000   00110000   10000000
+
+
 	// Логика
-	//for (int i = 1; i < 241; i++) {
-	//	for (int j = 4; j >= 1; j--) {
-	//		int k = 0;
-	//		if (truthTable[i][j][k] != '1') {
-	//			break;
-	//		}
-	//	}
-	//}
-	//                          01234567
-	// 
-	//    x1 x2 x3 x4 x5 x6 x7 x8 | y1 y2 y3 y4 y5 y6 y7 y8
-	//1   00110001   00110000   00010000 
-	//2   00110001   00110001   00010001
 	std::vector<int> indexes(8, -1);
 	std::vector<std::string> outputResul(8, "");
 	for (int i = 1; i < 241; i++) {
@@ -148,31 +121,18 @@ int main() {
 					if (truthTable[i][j][r] == '1') {
 						for (int n = 0; n < indexes.size(); n++) {
 							if (indexes[n] != -1) {
-								if (r < 7) {
 									outputResul[indexes[n]] += "x";
 									outputResul[indexes[n]] += std::to_string(r);
-									outputResul[indexes[n]] += "*";
-								}
-								else {
-									outputResul[indexes[n]] += "x";
-									outputResul[indexes[n]] += std::to_string(r);
-								}
+									outputResul[indexes[n]] += " * ";
 							}
 						}
 					}
 					else {
 						for (int n = 0; n < indexes.size(); n++) {
 							if (indexes[n] != -1) {
-								if (r < 7) {
 									outputResul[indexes[n]] += "(~x";
 									outputResul[indexes[n]] += std::to_string(r);
-									outputResul[indexes[n]] += ")*";
-								}
-								else {
-									outputResul[indexes[n]] += "(~x";
-									outputResul[indexes[n]] += std::to_string(r);
-									outputResul[indexes[n]] += ")";
-								}
+									outputResul[indexes[n]] += ") * ";
 							}
 						}
 					}
@@ -186,7 +146,7 @@ int main() {
 								if (r < 7) {
 									outputResul[indexes[n]] += "y";
 									outputResul[indexes[n]] += std::to_string(r);
-									outputResul[indexes[n]] += "*";
+									outputResul[indexes[n]] += " * ";
 								}
 								else {
 									outputResul[indexes[n]] += "y";
@@ -201,7 +161,7 @@ int main() {
 								if (r < 7) {
 									outputResul[indexes[n]] += "(~y";
 									outputResul[indexes[n]] += std::to_string(r);
-									outputResul[indexes[n]] += ")*";
+									outputResul[indexes[n]] += ") * ";
 								}
 								else {
 									outputResul[indexes[n]] += "(~y";
@@ -217,7 +177,7 @@ int main() {
 		}
 		for (int n = 0; n < indexes.size(); n++) {
 			if (indexes[n] != -1) {
-				outputResul[indexes[n]] += "+";
+				outputResul[indexes[n]] += " + ";
 			}
 		}
 		for (auto j : indexes) {
@@ -228,24 +188,8 @@ int main() {
 	 outputTable(truthTable);
 
 	 std::cout << std::endl << std::endl << std::endl;
-
-	 //for (auto i : outputResul) {
-		// std::cout << i << std::endl << std::endl << std::endl;
-	 //}
 	 
 	 outputEquation(outputResul);
 
-	//for (int i = 0; i < 256; i++) {
-	//	// Используем манипулятор std::hex для вывода числа в шестнадцатеричной форме
-	//	std::cout << std::setw(2) << std::setfill('0') << std::hex << i << " ";
-
-	//	// Переводим вывод обратно в десятичную систему
-	//	std::cout << std::dec;
-
-	//	// Выводим 16 чисел в строке
-	//	if ((i + 1) % 16 == 0) {
-	//		std::cout << std::endl;
-	//	}
-	//}
 	return 0;
 }
