@@ -105,7 +105,9 @@ void clearIndexes(std::vector<int>& indexes) {
 	}
 }
 
-void firstInputToFunc(std::vector<std::vector<std::string>>& truthTable, std::vector<std::string>& outputResult, std::vector<int>& indexes, int i, int j) {
+void firstInputToFunc(std::vector<std::vector<std::string>>& truthTable, 
+					  std::vector<std::string>& outputResult, 
+					  std::vector<int>& indexes, int i, int j) {
 
 	for (int r = 0; r < 8; r++) {
 		if (truthTable[i][j][r] == '1') {
@@ -129,12 +131,52 @@ void firstInputToFunc(std::vector<std::vector<std::string>>& truthTable, std::ve
 	}
 }
 
+void secondInputToFunc(std::vector<std::vector<std::string>>& truthTable, 
+					   std::vector<std::string>& outputResult, 
+					   std::vector<int>& indexes, int i, int j) {
+
+	for (int r = 0; r < 8; r++) {
+		if (truthTable[i][j][r] == '1') {
+			for (int n = 0; n < indexes.size(); n++) {
+				if (indexes[n] != -1) {
+					if (r < 7) {
+						outputResult[indexes[n]] += "y";
+						outputResult[indexes[n]] += std::to_string(r);
+						outputResult[indexes[n]] += " * ";
+					}
+					else {
+						outputResult[indexes[n]] += "y";
+						outputResult[indexes[n]] += std::to_string(r);
+					}
+				}
+			}
+		}
+		else {
+			for (int n = 0; n < indexes.size(); n++) {
+				if (indexes[n] != -1) {
+					if (r < 7) {
+						outputResult[indexes[n]] += "(~y";
+						outputResult[indexes[n]] += std::to_string(r);
+						outputResult[indexes[n]] += ") * ";
+					}
+					else {
+						outputResult[indexes[n]] += "(~y";
+						outputResult[indexes[n]] += std::to_string(r);
+						outputResult[indexes[n]] += ")";
+					}
+				}
+			}
+		}
+	}
+
+}
+
 int main() {
 	// Массив цифр из ASCII кода
 	std::vector<std::string> numbersAscii = data();
 
  
-	// Двумерный массив для вывода таблицы истинности
+	// Заполнение двумерного массива
 	int fRank = 1;
 	int counter = 0;
 	int hex = 16;
@@ -161,64 +203,31 @@ int main() {
 		std::cout << std::endl;
 	}
 
-
 	// Логика
 	std::vector<int> indexes(8, -1);
-	std::vector<std::string> outputResul(8, "");
+	std::vector<std::string> outputResult(8, "");
 	for (int i = 1; i < 241; i++) {
 		for (int k = 0; k < 8; k++) {
 			if (truthTable[i][4][k] == '1') indexes[k] = k;
 		}
 		for (int j = 2; j < 4; j++) {
 			if (j == 2) {
-				firstInputToFunc(truthTable, outputResul, indexes, i, j);
+				firstInputToFunc(truthTable, outputResult, indexes, i, j);
 			}
 			if (j == 3) {
-				for (int r = 0; r < 8; r++) {
-					if (truthTable[i][j][r] == '1') {
-						for (int n = 0; n < indexes.size(); n++) {
-							if (indexes[n] != -1) {
-								if (r < 7) {
-									outputResul[indexes[n]] += "y";
-									outputResul[indexes[n]] += std::to_string(r);
-									outputResul[indexes[n]] += " * ";
-								}
-								else {
-									outputResul[indexes[n]] += "y";
-									outputResul[indexes[n]] += std::to_string(r);
-								}
-							}
-						}
-					}
-					else {
-						for (int n = 0; n < indexes.size(); n++) {
-							if (indexes[n] != -1) {
-								if (r < 7) {
-									outputResul[indexes[n]] += "(~y";
-									outputResul[indexes[n]] += std::to_string(r);
-									outputResul[indexes[n]] += ") * ";
-								}
-								else {
-									outputResul[indexes[n]] += "(~y";
-									outputResul[indexes[n]] += std::to_string(r);
-									outputResul[indexes[n]] += ")";
-								}
-							}
-						}
-					}
-				}
+				secondInputToFunc(truthTable, outputResult, indexes, i, j);
 			}
 
 		}
-		addPlus(indexes, outputResul);
+		addPlus(indexes, outputResult);
 		clearIndexes(indexes);
 		
 	}
-	 outputTable(truthTable);
 
+	// Вывод
+	 outputTable(truthTable);
 	 std::cout << std::endl << std::endl << std::endl;
-	 
-	 outputEquation(outputResul);
+	 outputEquation(outputResult);
 
 	return 0;
 }
