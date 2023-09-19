@@ -30,14 +30,20 @@ std::string hexToBinary(int number) {
 }
 
 std::string HexOfDecimalToBinary(int number) {
+	
 	std::string hexString = std::to_string(number);
 	int decimalValue;
+
+	// Создается поток, которй содержит значение hexString, после с помошью ">>"
+	// поток читается как HEX и преобразуется в десятичное значение, которое
+	// сохраняется в int
 	std::stringstream(hexString) >> std::hex >> decimalValue;
 	std::bitset<8> binaryValue(decimalValue);
 	return binaryValue.to_string();
 }
 
 void outputTable(std::vector<std::vector<std::string>>& truthTable) {
+	
 	for (int i = 1; i < truthTable.size(); i++) {
 		for (int j = 1; j < truthTable[1].size(); j++) {
 			std::cout << std::setw(8) << truthTable[i][j] << "   ";
@@ -47,7 +53,9 @@ void outputTable(std::vector<std::vector<std::string>>& truthTable) {
 }
 
 void outputEquation(std::vector<std::string>& equation) {
+	
 	for (int i = 0; i < equation.size(); i++) {
+		equation[i].pop_back();
 		equation[i].pop_back();
 	}
 	for (int i = 0; i < equation.size(); i++) {
@@ -63,8 +71,8 @@ void outputEquation(std::vector<std::string>& equation) {
 	}
 }
 
-int main() {
-	// Массив цифр из ASCII кода
+std::vector<std::string> data() {
+
 	std::vector<std::string> numbersAscii(16);
 	int lOne = 30;
 	int lTwo = 41;
@@ -78,6 +86,52 @@ int main() {
 			lTwo++;
 		}
 	}
+	return numbersAscii;
+}
+
+void addPlus(std::vector<int>& indexes, std::vector<std::string>& outputResult) {
+	
+	for (int n = 0; n < indexes.size(); n++) {
+		if (indexes[n] != -1) {
+			outputResult[indexes[n]] += " + ";
+		}
+	}
+}
+
+void clearIndexes(std::vector<int>& indexes) {
+
+	for (auto j : indexes) {
+		j = -1;
+	}
+}
+
+void firstInputToFunc(std::vector<std::vector<std::string>>& truthTable, std::vector<std::string>& outputResult, std::vector<int>& indexes, int i, int j) {
+
+	for (int r = 0; r < 8; r++) {
+		if (truthTable[i][j][r] == '1') {
+			for (int n = 0; n < indexes.size(); n++) {
+				if (indexes[n] != -1) {
+					outputResult[indexes[n]] += "x";
+					outputResult[indexes[n]] += std::to_string(r);
+					outputResult[indexes[n]] += " * ";
+				}
+			}
+		}
+		else {
+			for (int n = 0; n < indexes.size(); n++) {
+				if (indexes[n] != -1) {
+					outputResult[indexes[n]] += "(~x";
+					outputResult[indexes[n]] += std::to_string(r);
+					outputResult[indexes[n]] += ") * ";
+				}
+			}
+		}
+	}
+}
+
+int main() {
+	// Массив цифр из ASCII кода
+	std::vector<std::string> numbersAscii = data();
 
  
 	// Двумерный массив для вывода таблицы истинности
@@ -117,26 +171,7 @@ int main() {
 		}
 		for (int j = 2; j < 4; j++) {
 			if (j == 2) {
-				for (int r = 0; r < 8; r++) {
-					if (truthTable[i][j][r] == '1') {
-						for (int n = 0; n < indexes.size(); n++) {
-							if (indexes[n] != -1) {
-									outputResul[indexes[n]] += "x";
-									outputResul[indexes[n]] += std::to_string(r);
-									outputResul[indexes[n]] += " * ";
-							}
-						}
-					}
-					else {
-						for (int n = 0; n < indexes.size(); n++) {
-							if (indexes[n] != -1) {
-									outputResul[indexes[n]] += "(~x";
-									outputResul[indexes[n]] += std::to_string(r);
-									outputResul[indexes[n]] += ") * ";
-							}
-						}
-					}
-				}
+				firstInputToFunc(truthTable, outputResul, indexes, i, j);
 			}
 			if (j == 3) {
 				for (int r = 0; r < 8; r++) {
@@ -175,14 +210,8 @@ int main() {
 			}
 
 		}
-		for (int n = 0; n < indexes.size(); n++) {
-			if (indexes[n] != -1) {
-				outputResul[indexes[n]] += " + ";
-			}
-		}
-		for (auto j : indexes) {
-			j = -1;
-		}
+		addPlus(indexes, outputResul);
+		clearIndexes(indexes);
 		
 	}
 	 outputTable(truthTable);
