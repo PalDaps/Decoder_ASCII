@@ -171,17 +171,18 @@ void secondInputToFunc(std::vector<std::vector<std::string>>& truthTable,
 
 }
 
-int main() {
+void notOpitTt() {
+
 	// Массив цифр из ASCII кода
 	std::vector<std::string> numbersAscii = data();
 
- 
+
 	// Заполнение двумерного массива
-	int fRank = 1;
+	int fRank = 0;
 	int counter = 0;
-	int hex = 16;
-	std::vector<std::vector<std::string>> truthTable(241, std::vector<std::string>(6, "*"));
-	for (int i = 1; i < 241; i++) {
+	int hex = 0;
+	std::vector<std::vector<std::string>> truthTable(257, std::vector<std::string>(6, "*"));
+	for (int i = 1; i < 257; i++) {
 		for (int j = 1; j < 6; j++) {
 			if (j == 1) truthTable[i][j] = std::to_string(i);
 			if (j == 2) {
@@ -221,13 +222,46 @@ int main() {
 		}
 		addPlus(indexes, outputResult);
 		clearIndexes(indexes);
-		
+
 	}
 
 	// Вывод
-	 outputTable(truthTable);
-	 std::cout << std::endl << std::endl << std::endl;
-	 outputEquation(outputResult);
+	outputTable(truthTable);
+	std::cout << std::endl << std::endl << std::endl;
+	outputEquation(outputResult);
+}
 
+void OptiTt() {
+
+	// Массив цифр из ASCII кода
+	std::vector<std::string> numbersAscii = data();
+	// Заполнение двумерного массива
+	int fRank = 0;
+	int counter = 0;
+	int hex = 0;
+	std::vector<std::vector<std::string>> truthTable(17, std::vector<std::string>(6, "*"));
+	for (int i = 1; i < 17; i++) {
+		for (int j = 1; j < 6; j++) {
+			if (j == 1) truthTable[i][j] = std::to_string(i);
+			if (j == 2) {
+				truthTable[i][j] = numbersAscii[counter];
+				counter++;
+			}
+			if (j == 3) {
+				truthTable[i][j] = hexToBinary(hex);
+				hex++;
+			}
+		}
+		std::cout << std::endl;
+	}
+
+	outputTable(truthTable);
+	std::cout << std::endl << std::endl << std::endl;
+}
+
+int main() {
+
+	OptiTt();
+	//notOpitTt();
 	return 0;
 }
